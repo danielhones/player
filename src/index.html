@@ -8,9 +8,6 @@
       font-family: sans;
       font-size: 16px;
     }
-    body * {
-      margin-top: 0.2em;
-    }
     #time {
       font-size: 1.2em;
       margin: auto;
@@ -22,11 +19,11 @@
     <div id="waveform"></div>
     <div id="time"></div>
     <div id="controls">
-      <button onclick="wf.skipBackward()">&lt;&lt;</button>
-      <button onclick="wf.playPause()">play/pause</button>
-      <button onclick="wf.skipForward()">&gt;&gt;</button>
-      <button>zoom in</button>
-      <button>zoom out</button>
+      <button id="skip_back_btn">&lt;&lt;</button>
+      <button id="play_pause_btn">play</button>
+      <button id="skip_forward_btn">&gt;&gt;</button>
+      <button id="zoom_in_btn">zoom in</button>
+      <button id="zoom_out_btn">zoom out</button>
       <br><br>
       <input id="file_input" type="file">
     </div>
