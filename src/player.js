@@ -6,9 +6,53 @@ function pad(n) {
     return (0 <= n && n < 10) ? ("0" + n) : n.toString();
 }
 
+
 var Player = function() {
+    var loop_start;
+    var loop_end;
+    var original_zoom_level;
+    var wavesurfer;
+
+    init();
+
+    function init() {
+	wavesurfer = WaveSurfer.create({
+	    container: WAVEFORM_CONTAINER,
+	    height: 128,
+	    normalize: true,
+	    progressColor: 'darkblue',
+	    waveColor: 'blue'
+	});
+	wavesurfer.on('audioprocess', handle_playing);
+	wavesurfer.on('seek', update_time);
+	wavesurfer.on('ready', function() { update_time(0); });
+	original_zoom_level = wavesurfer.params.minPxPerSec;
+    }
+
+    update_time = function(time) {
+	time = time || wavesurfer.getCurrentTime();
+	var minutes = Math.floor(time / 60);
+	var seconds = (time - minutes * 60).toFixed(3);
+	document.getElementById('time').innerHTML = minutes + ":" + pad(seconds);
+    };
+
+    handle_playing = function() {
+	if (wavesurfer.getCurrentTime() >= loop_end) {
+	    wavesurfer.seekAndCenter(loop_start);  // or just seekTo?
+	}
+	update_time();
+    };
+
+    dispatch_keypress = function() {
+
+    };
+
+    dispatch_mouse = function() {
+
+    };
     
 };
+
 
 function init_wavesurfer() {
     var wavesurfer = WaveSurfer.create({
@@ -63,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     wf.on('audioprocess', function() { update_time(wf.getCurrentTime()); });
     wf.on('seek', function() { update_time(wf.getCurrentTime()); });
-    // wf.on('ready', function() { wf.play(); });
     wf.on('ready', function() { update_time(0); } );
     wf.load('../untitled.mp3');
     document.addEventListener('keyup', dispatch_keypress);
