@@ -1,1 +1,5 @@
 *.mp3
+node_modules/
+build/
+staging/
+extsrc/

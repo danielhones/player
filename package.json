@@ -1,0 +1,23 @@
+{
+  "name": "player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/danielhones/player.git"
+  },
+  "author": "Daniel Hones",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/danielhones/player/issues"
+  },
+  "homepage": "https://gitlab.com/danielhones/player#README",
+  "devDependencies": {
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-inline": "^0.3.6"
+  }
+}

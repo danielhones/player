@@ -33,7 +33,6 @@ var AudioPlayer = function() {
 	that.ws.on('audioprocess', that.handle_playing);
 	that.ws.on('seek', function() { that.update_time(); } );
 	that.ws.on('ready', function() { that.update_time(0); });
-	that.ws.load('../untitled.mp3');
 	that.ws.on('ready', function() {
 	    that.loop_end = that.ws.getDuration() / 2;
 	});
@@ -56,13 +55,13 @@ var AudioPlayer = function() {
     this.set_loop_start = function(time) {
 	that.loop_start = time || that.ws.getCurrentTime();
 	if (that.loop_end < that.loop_start) {
-	    that.loop_end = that.loop_start;
+	    that.set_loop_end(that.loop_start);
 	}
 	if (that.loop_start < 0) {
-	    that.loop_start = 0;
+	    that.set_loop_start(0);
 	}
 	if (that.loop_start > that.ws.getDuration()) {
-	    that.loop_start = that.ws.getDuration();
+	    that.set_loop_start(that.ws.getDuration());
 	}
 	document.getElementById('loop_start_input')
 	    .value = format_time(that.loop_start);
@@ -71,13 +70,13 @@ var AudioPlayer = function() {
     this.set_loop_end = function(time) {
 	that.loop_end = time || that.ws.getCurrentTime();
 	if (that.loop_end < that.loop_start) {
-	    that.loop_start = that.loop_end;
+	    that.set_loop_start(that.loop_end);
 	}
 	if (that.loop_end < 0) {
-	    that.loop_end = 0;
+	    that.set_loop_end(0);
 	}
 	if (that.loop_end > that.ws.getDuration()) {
-	    that.loop_end = that.ws.getDuration();
+	    that.set_loop_end(that.ws.getDuration());
 	}
 	document.getElementById('loop_end_input')
 	    .value = format_time(that.loop_end);
@@ -151,6 +150,7 @@ var AudioPlayer = function() {
 
     this.load_audio_file = function(e) {
 	// adapted from here - http://stackoverflow.com/a/26298948/3199099
+	e.srcElement.blur();
 	var file = e.target.files[0];
 	if (!file) {
 	    return;
