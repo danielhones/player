@@ -21,20 +21,27 @@ var AudioPlayer = function() {
     this.loop_start = 0;
     this.loop_end = 0;
     this.loop_enabled = false;
+    this.region = false;
 
     this.init = function () {
 	that.ws = WaveSurfer.create({
 	    container: WAVEFORM_CONTAINER,
+	    cursorWidth: 1,
 	    height: 128,
 	    normalize: true,
-	    progressColor: 'darkblue',
-	    waveColor: 'blue'
-	});
+	    progressColor: 'lightblue',
+	    waveColor: 'lightblue'
+	});	
 	that.ws.on('audioprocess', that.handle_playing);
+	that.ws.on('pause', that.handle_pause);
 	that.ws.on('seek', function() { that.update_time(); } );
-	that.ws.on('ready', function() { that.update_time(0); });
 	that.ws.on('ready', function() {
-	    that.loop_end = that.ws.getDuration() / 2;
+	    that.ws.enableDragSelection();
+	    that.ws.on('region-created', that.handle_region_create);
+	    that.ws.on('region-removed', that.handle_region_remove);
+	    that.update_time(0);
+	    that.set_loop_end(that.ws.getDuration());
+	    that.ws.zoom(0);
 	});
     };
     
@@ -44,14 +51,34 @@ var AudioPlayer = function() {
     };
 
     this.handle_playing = function() {
+	/*
 	if (that.loop_enabled && that.ws.getCurrentTime() >= that.loop_end) {
 	    setTimeout(function () {
                 that.ws.seekTo(seconds_to_progress(that.loop_start));
             }, 0);
 	}
+	document.getElementById('play_pause_btn').innerHTML = 'pause';
+	*/
 	that.update_time();
     };
 
+    this.handle_pause = function() {
+	document.getElementById('play_pause_btn').innerHTML = 'play';
+    };
+
+    this.handle_region_create = function(region) {
+	Object.keys(that.ws.regions.list).forEach(function(id) {
+	    if (region.id !== id) {
+		that.ws.regions.list[id].remove();
+	    }
+	});
+	that.region = region;
+    };
+
+    that.handle_region_remove = function() {
+	that.region = false;
+    };
+    
     this.set_loop_start = function(time) {
 	that.loop_start = time || that.ws.getCurrentTime();
 	if (that.loop_end < that.loop_start) {
@@ -83,11 +110,21 @@ var AudioPlayer = function() {
     };
 
     this.loop_on = function() {
-	that.loop_enabled = true;
+	that.loop_enabled = true;  // TODO: remove soon
+	if (that.region) {
+	    that.region.loop = true;
+	    document.getElementById('loop_enabled')
+		.innerHTML = "loop enabled";
+	}
     };
 
     this.loop_off = function() {
-	that.loop_enabled = false;
+	that.loop_enabled = false;  // TODO: remove soon
+	if (that.region) {
+	    that.region.loop = false;
+	    document.getElementById('loop_enabled')
+		.innerHTML = "no loop";
+	}
     };
     
     this.dispatch_keypress = function(e) {
@@ -128,8 +165,6 @@ var AudioPlayer = function() {
 	    that.set_loop_end(that.loop_end + SMALL_SCRUB_INCREMENT);
 	} else if (e.key === "o") {
 	    that.loop_enabled ? that.loop_off() : that.loop_on();
-	    document.getElementById('loop_enabled')
-		.innerHTML = that.loop_enabled ? "loop enabled" : "no loop";
 	} else if (e.key === "s") {
 	    // toggle scrollParent property
 	    that.ws.params.scrollParent ? (that.ws.params.scrollParent = false) : (that.ws.scrollParent = true);
@@ -167,15 +202,15 @@ var AudioPlayer = function() {
 document.addEventListener("DOMContentLoaded", function(event) { 
     player = new AudioPlayer();
     player.init();
-    document.addEventListener('keyup', player.dispatch_keypress);
+    document.addEventListener('keydown', player.dispatch_keypress);
     document.getElementById('file_input')
 	.addEventListener('change', player.load_audio_file, false);
     document.getElementById('waveform')
     	.addEventListener('mousemove', player.dispatch_mouse);
 
-    document.getElementById('skip_back_btn').onclick = player.ws.skipBackward;
-    document.getElementById('play_pause_btn').onclick = player.ws.playPause;
-    document.getElementById('skip_forward_btn').onclick = player.ws.skipForward;
+    document.getElementById('skip_back_btn').onclick = function() { player.ws.skipBackward(); };
+    document.getElementById('play_pause_btn').onclick = function() { player.ws.playPause(); };
+    document.getElementById('skip_forward_btn').onclick = function() { player.ws.skipForward(); };
     document.getElementById('zoom_in_btn').onclick = player.zoom_in;
     document.getElementById('zoom_out_btn').onclick = player.zoom_out;
 });

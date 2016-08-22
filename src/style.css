@@ -1,4 +1,5 @@
 html * {
+  box-sizing: border-box;
   font-family: sans;
   font-size: 16px;
 }
@@ -7,4 +8,31 @@ html * {
   font-size: 1.2em;
   margin: auto;
   text-align: center;
+}
+
+button {
+  border-radius: 2px;
+  color: rgba(0, 0, 0, 0.80);
+  border: none rgba(0, 0, 0, 0);
+  background-color: #E6E6E6;
+  cursor: pointer;
+  padding: 0.3em 0.5em 0.3em;
+}
+
+button:hover, button:focus {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1a000000',GradientType=0);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0.05)), to(rgba(0,0,0, 0.10)));
+  background-image: -webkit-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
+  background-image: -moz-linear-gradient(top, rgba(0,0,0, 0.05) 0%, rgba(0,0,0, 0.10));
+  background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
+  background-image: linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
+}
+
+input {
+  border-radius: 2px;
+  border: 1px #e6e6e6 solid;
+}
+
+input[type="file"] {
+  width: 30em;
 }
