@@ -1,9 +1,10 @@
 var WAVEFORM_CONTAINER = '#waveform';
-var SMALL_SCRUB_INCREMENT = 0.1;  // seconds
-var LARGE_SCRUB_INCREMENT = 2;  // seconds
+var REGION_VISIBLE_COLOR = 'rgba(0, 0, 0, 0.1)';
+var REGION_HIDE = 'rgba(0, 0, 0, 0)';
 
 
 function pad(n) {
+    // from here - http://stackoverflow.com/a/8089938/3199099
     return (0 <= n && n < 10) ? ("0" + n) : n.toString();
 }
 
@@ -59,10 +60,11 @@ var AudioPlayer = function() {
     };
 
     this.handle_playing = function() {
+	document.getElementById('play_pause_btn').innerHTML = 'pause';
 	that.update_time();
     };
 
-    this.handle_pause = function() {
+    this.pause = function() {
 	document.getElementById('play_pause_btn').innerHTML = 'play';
     };
 
@@ -73,9 +75,10 @@ var AudioPlayer = function() {
 	    }
 	});
 	that.region = region;
+	that.loop_on();
     };
 
-    that.handle_region_remove = function() {
+    this.handle_region_remove = function() {
 	that.region = false;
     };
     
@@ -114,6 +117,8 @@ var AudioPlayer = function() {
     this.loop_on = function() {
 	if (that.region) {
 	    that.region.loop = true;
+	    that.region.color = REGION_VISIBLE_COLOR;
+	    that.region.updateRender();
 	    document.getElementById('loop_enabled')
 		.innerHTML = "loop enabled";
 	}
@@ -122,6 +127,8 @@ var AudioPlayer = function() {
     this.loop_off = function() {
 	if (that.region) {
 	    that.region.loop = false;
+	    that.region.color = REGION_HIDE;
+	    that.region.updateRender();
 	    document.getElementById('loop_enabled')
 		.innerHTML = "no loop";
 	}
@@ -172,6 +179,16 @@ var AudioPlayer = function() {
 	} else if (e.key === "s") {
 	    // toggle scrollParent property
 	    that.ws.params.scrollParent ? (that.ws.params.scrollParent = false) : (that.ws.scrollParent = true);
+	} else if (e.key === "f") {
+	    document.getElementById('file_input').click();
+	} else if (e.key === "a") {
+	    if (that.region) {
+		that.ws.seekAndCenter(that.region.start / that.ws.getDuration());
+	    }
+	} else if (e.key === "0" && !e.shiftKey) {
+	    that.ws.seekAndCenter(0);
+	} else if (e.key === "$") {
+	    that.ws.seekAndCenter(1);
 	}
     };
 
@@ -189,7 +206,7 @@ var AudioPlayer = function() {
 
     this.large_scrub_increment = function() {
 	var min = 0.5;
-	var max = 10;
+	var max = 5;
 	var zoom = that.ws.params.minPxPerSec;
 	var increment = max - (max - min) * zoom / 100;
 	return keep_in_bounds(increment, [min, max]);
@@ -223,11 +240,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     player = new AudioPlayer();
     player.init();
     document.addEventListener('keydown', player.dispatch_keypress);
-    document.getElementById('file_input')
-	.addEventListener('change', player.load_audio_file, false);
-    document.getElementById('waveform')
-    	.addEventListener('mousemove', player.dispatch_mouse);
-
+    document.getElementById('file_input').addEventListener('change', player.load_audio_file, false);
+    document.getElementById('waveform').addEventListener('mousemove', player.dispatch_mouse);
     document.getElementById('skip_back_btn').onclick = function() { player.ws.skipBackward(); };
     document.getElementById('play_pause_btn').onclick = function() { player.ws.playPause(); };
     document.getElementById('skip_forward_btn').onclick = function() { player.ws.skipForward(); };

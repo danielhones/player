@@ -3,11 +3,13 @@
     <title>player</title>
     <script src="../extsrc/wavesurfer.min.js"></script>
     <script src="../extsrc/wavesurfer.regions.min.js"></script>
+    <script src="../extsrc/wavesurfer.timeline.min.js"></script>
     <script src="player.js" type="text/javascript"></script>
     <link href="style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <div id="waveform"></div>
+    <div id="waveform_timeline"></div>
     <div id="time"></div>
     <div id="controls">
       <button id="skip_back_btn">&lt;&lt;</button>
@@ -24,6 +26,10 @@
       <label for="loop_end_input">Loop end:</label>
       <input id="loop_end_input" type="text">
     </div>
-    <div id="attribution">Built with <a href="http://wavesurfer-js.org">WaveSurfer</a></div>
+    <div id="attribution">
+      Built with <a href="http://wavesurfer-js.org">WaveSurfer</a>
+      by <a href="https://github.com/katspaugh">katspaugh</a>
+      licensed under <a href="https://creativecommons.org/licenses/by/3.0/deed.en_US">CC BY 3.0</a>
+    </div>
   </body>
 </html>
