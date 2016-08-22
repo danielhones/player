@@ -180,17 +180,19 @@ var AudioPlayer = function() {
     };
 
     this.small_scrub_increment = function() {
+	var min = 0.01;
+	var max = 0.2;
 	var zoom = that.ws.params.minPxPerSec;
-	console.log('zoom: ', zoom);
-	var increment = 0;
-	return keep_in_bounds(increment, [0.01, 0.2]);
+	var increment = max - (max - min) * zoom / 100;
+	return keep_in_bounds(increment, [min, max]);
     };
 
     this.large_scrub_increment = function() {
+	var min = 0.5;
+	var max = 10;
 	var zoom = that.ws.params.minPxPerSec;
-	console.log('zoom: ', zoom);
-	var increment = 0;
-	return keep_in_bounds(increment, [0.5, 10]);
+	var increment = max - (max - min) * zoom / 100;
+	return keep_in_bounds(increment, [min, max]);
     };
 
     this.zoom_in = function() {
