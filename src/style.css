@@ -10,6 +10,17 @@ html * {
   text-align: center;
 }
 
+#attribution {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 0.5em;
+}
+
+#attribution, #attribution a {
+  font-size: 0.8em;
+}
+
 button {
   border-radius: 2px;
   color: rgba(0, 0, 0, 0.80);
