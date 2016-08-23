@@ -32,6 +32,7 @@ var AudioPlayer = function() {
     this.loop_end = 0;
     this.loop_enabled = false;
     this.region = false;
+    this.timeline = false;
 
     this.init = function () {
 	that.ws = WaveSurfer.create({
@@ -41,7 +42,12 @@ var AudioPlayer = function() {
 	    normalize: true,
 	    progressColor: 'lightblue',
 	    waveColor: 'lightblue'
-	});	
+	});
+	that.timeline = Object.create(WaveSurfer.Timeline);
+	that.timeline.init({
+	    wavesurfer: that.ws,
+	    container: '#waveform_timeline'
+	});
 	that.ws.on('audioprocess', that.handle_playing);
 	that.ws.on('pause', that.handle_pause);
 	that.ws.on('seek', function() { that.update_time(); } );
@@ -160,16 +166,24 @@ var AudioPlayer = function() {
 	    that.set_loop_end(that.ws.getCurrentTime());
 	} else if (e.key === "Y") {
 	    // scrub loop start left
-	    that.set_loop_start(that.region.start - that.small_scrub_increment());
+	    if (that.region) {
+		that.set_loop_start(that.region.start - that.small_scrub_increment());
+	    }
 	} else if (e.key === "U") {
 	    // scrub loop start right
-	    that.set_loop_start(that.region.start + that.small_scrub_increment());
+	    if (that.region) {
+		that.set_loop_start(that.region.start + that.small_scrub_increment());
+	    }
 	} else if (e.key === "I") {
 	    // scrub loop end left
-	    that.set_loop_end(that.region.end - that.small_scrub_increment());
+	    if (that.region) {
+		that.set_loop_end(that.region.end - that.small_scrub_increment());
+	    }
 	} else if (e.key === "O") {
 	    // scrub loop end right
-	    that.set_loop_end(that.region.end + that.small_scrub_increment());
+	    if (that.region) {
+		that.set_loop_end(that.region.end + that.small_scrub_increment());
+	    }
 	} else if (e.key === "o") {
 	    if (that.region) {
 		that.region.loop ? that.loop_off() : that.loop_on();
