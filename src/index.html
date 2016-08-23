@@ -24,21 +24,16 @@
       <div id="file_input_container" class="headroom">
 	<input id="file_input" type="file" style="display: none;">
 	<div id="filename">No file selected</div><br>
-	<button id="load_file_btn">Choose file</button>
+ 	<button id="load_file_btn">Choose file</button>
       </div>
-      <div id="loop_indicators" class="headroom">
+      <div id="loop_indicators" class="headroom" style="display: none;">
 	<table>
 	  <tbody>
 	    <tr>
-	      <td colspan="2"><span id="loop_enabled">no loop</span></td>
-	    </tr>
-	    <tr>
-	      <td><label for="loop_start_input">Loop start:</label></td>
-	      <td><input id="loop_start_input" type="text"></td>
-	    </tr>
-	    <tr>
-	      <td><label for="loop_end_input">Loop end:</label></td>
-	      <td><input id="loop_end_input" type="text"></td>
+	      <td title="loop enabled"><i class="fa fa-refresh fa-flip-horizontal"></i></td>
+	      <td id="loop_start_indicator" title="loop start time"></td>
+	      <td><i class="fa fa-long-arrow-right"></i></td>
+	      <td id="loop_end_indicator" title="loop end time"></td>
 	    </tr>
 	  </tbody>
 	</table>

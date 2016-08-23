@@ -64,6 +64,7 @@ var AudioPlayer = function() {
 	    that.ws.enableDragSelection();
 	    that.ws.on('region-created', that.handle_region_create);
 	    that.ws.on('region-removed', that.handle_region_remove);
+	    that.ws.on('region-updated', function() { that.update_loop_indicators(); });
 	    that.update_time(0);
 	    that.ws.zoom(0);
 	});
@@ -93,6 +94,7 @@ var AudioPlayer = function() {
 	});
 	that.region = region;
 	that.loop_on();
+	that.update_loop_indicators();
     };
 
     this.handle_region_remove = function() {
@@ -111,8 +113,7 @@ var AudioPlayer = function() {
 		end: that.ws.getDuration()
 	    });
 	}
-	document.getElementById('loop_start_input')
-	    .value = format_time(loop_start);
+	that.update_loop_indicators();
     };
 
     this.set_loop_end = function(time) {
@@ -127,8 +128,7 @@ var AudioPlayer = function() {
 		end: loop_end
 	    });
 	}
-	document.getElementById('loop_end_input')
-	    .value = format_time(loop_end);
+	that.update_loop_indicators();
     };
 
     this.loop_toggle = function() {
@@ -144,8 +144,7 @@ var AudioPlayer = function() {
 	    that.region.loop = true;
 	    that.region.color = REGION_VISIBLE_COLOR;
 	    that.region.updateRender();
-	    document.getElementById('loop_enabled')
-		.innerHTML = "loop enabled";
+	    document.getElementById('loop_indicators').style.display = '';
 	}
     };
 
@@ -154,9 +153,17 @@ var AudioPlayer = function() {
 	    that.region.loop = false;
 	    that.region.color = REGION_HIDE;
 	    that.region.updateRender();
-	    document.getElementById('loop_enabled')
-		.innerHTML = "no loop";
+	    document.getElementById('loop_indicators').style.display = 'none';
 	}
+    };
+
+    this.update_loop_indicators = function() {
+	var start_time = that.region ? that.region.start : "";
+	var end_time = that.region ? that.region.end : "";
+	document.getElementById('loop_start_indicator')
+	    .innerHTML = format_time(start_time);
+	document.getElementById('loop_end_indicator')
+	    .innerHTML = format_time(end_time);
     };
     
     this.dispatch_keypress = function(e) {

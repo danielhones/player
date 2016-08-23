@@ -85,6 +85,7 @@ var AudioPlayer = function() {
 	    that.ws.enableDragSelection();
 	    that.ws.on('region-created', that.handle_region_create);
 	    that.ws.on('region-removed', that.handle_region_remove);
+	    that.ws.on('region-updated', function() { that.update_loop_indicators(); });
 	    that.update_time(0);
 	    that.ws.zoom(0);
 	});
@@ -114,6 +115,7 @@ var AudioPlayer = function() {
 	});
 	that.region = region;
 	that.loop_on();
+	that.update_loop_indicators();
     };
 
     this.handle_region_remove = function() {
@@ -132,8 +134,7 @@ var AudioPlayer = function() {
 		end: that.ws.getDuration()
 	    });
 	}
-	document.getElementById('loop_start_input')
-	    .value = format_time(loop_start);
+	that.update_loop_indicators();
     };
 
     this.set_loop_end = function(time) {
@@ -148,8 +149,7 @@ var AudioPlayer = function() {
 		end: loop_end
 	    });
 	}
-	document.getElementById('loop_end_input')
-	    .value = format_time(loop_end);
+	that.update_loop_indicators();
     };
 
     this.loop_toggle = function() {
@@ -165,8 +165,7 @@ var AudioPlayer = function() {
 	    that.region.loop = true;
 	    that.region.color = REGION_VISIBLE_COLOR;
 	    that.region.updateRender();
-	    document.getElementById('loop_enabled')
-		.innerHTML = "loop enabled";
+	    document.getElementById('loop_indicators').style.display = '';
 	}
     };
 
@@ -175,9 +174,17 @@ var AudioPlayer = function() {
 	    that.region.loop = false;
 	    that.region.color = REGION_HIDE;
 	    that.region.updateRender();
-	    document.getElementById('loop_enabled')
-		.innerHTML = "no loop";
+	    document.getElementById('loop_indicators').style.display = 'none';
 	}
+    };
+
+    this.update_loop_indicators = function() {
+	var start_time = that.region ? that.region.start : "";
+	var end_time = that.region ? that.region.end : "";
+	document.getElementById('loop_start_indicator')
+	    .innerHTML = format_time(start_time);
+	document.getElementById('loop_end_indicator')
+	    .innerHTML = format_time(end_time);
     };
     
     this.dispatch_keypress = function(e) {
@@ -333,21 +340,16 @@ html *{box-sizing:border-box;font-family:sans;font-size:16px}#time{font-size:1.5
       <div id="file_input_container" class="headroom">
 	<input id="file_input" type="file" style="display: none;">
 	<div id="filename">No file selected</div><br>
-	<button id="load_file_btn">Choose file</button>
+ 	<button id="load_file_btn">Choose file</button>
       </div>
-      <div id="loop_indicators" class="headroom">
+      <div id="loop_indicators" class="headroom" style="display: none;">
 	<table>
 	  <tbody>
 	    <tr>
-	      <td colspan="2"><span id="loop_enabled">no loop</span></td>
-	    </tr>
-	    <tr>
-	      <td><label for="loop_start_input">Loop start:</label></td>
-	      <td><input id="loop_start_input" type="text"></td>
-	    </tr>
-	    <tr>
-	      <td><label for="loop_end_input">Loop end:</label></td>
-	      <td><input id="loop_end_input" type="text"></td>
+	      <td title="loop enabled"><i class="fa fa-refresh fa-flip-horizontal"></i></td>
+	      <td id="loop_start_indicator" title="loop start time"></td>
+	      <td><i class="fa fa-long-arrow-right"></i></td>
+	      <td id="loop_end_indicator" title="loop end time"></td>
 	    </tr>
 	  </tbody>
 	</table>
