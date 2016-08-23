@@ -17,11 +17,14 @@
 	<button id="skip_back_btn" title="skip backwards"><i class="fa fa-backward"></i></button>
 	<button id="play_pause_btn" title="play/pause"><i class="fa fa-play"></i><i class="fa fa-pause" style="display: none;"></i></button>
 	<button id="skip_forward_btn" title="skip forwards"><i class="fa fa-forward"></i></button>
-	<button id="zoom_in_btn" title="zoom in on waveform"><i class="fa fa-plus"></i></button>
-	<button id="zoom_out_btn" title="zoom out from waveform"><i class="fa fa-minus"></i></button>
+	<button id="loop_toggle_btn" title="toggle loop on/off"><i class="fa fa-undo"></i></button>
+	<button id="zoom_in_btn" title="zoom in on waveform"><i class="fa fa-search-plus"></i></button>
+	<button id="zoom_out_btn" title="zoom out from waveform"><i class="fa fa-search-minus"></i></button>
       </div>
       <div id="file_input_container" class="headroom">
-	<input id="file_input" type="file">
+	<input id="file_input" type="file" style="display: none;">
+	<div id="filename">No file selected</div><br>
+	<button id="load_file_btn">Choose file</button>
       </div>
       <div id="loop_indicators" class="headroom">
 	<table>

@@ -56,6 +56,10 @@ var AudioPlayer = function() {
 	that.ws.on('audioprocess', that.handle_playing);
 	that.ws.on('pause', that.handle_pause);
 	that.ws.on('seek', function() { that.update_time(); } );
+	that.ws.on('loading', function() {
+	    document.getElementById('time').innerHTML =
+		'<i class="fa fa-spinner fa-pulse"></i>';
+	});
 	that.ws.on('ready', function() {
 	    that.ws.enableDragSelection();
 	    that.ws.on('region-created', that.handle_region_create);
@@ -127,6 +131,14 @@ var AudioPlayer = function() {
 	    .value = format_time(loop_end);
     };
 
+    this.loop_toggle = function() {
+	if (that.region) {
+	    that.region.loop ? that.loop_off() : that.loop_on();
+	} else {
+	    console.log("no region selected");
+	}
+    };
+
     this.loop_on = function() {
 	if (that.region) {
 	    that.region.loop = true;
@@ -193,11 +205,7 @@ var AudioPlayer = function() {
 		that.set_loop_end(that.region.end + that.small_scrub_increment());
 	    }
 	} else if (e.key === "o") {
-	    if (that.region) {
-		that.region.loop ? that.loop_off() : that.loop_on();
-	    } else {
-		console.log("no region selected");
-	    }
+	    that.loop_toggle();
 	} else if (e.key === "s") {
 	    // toggle scrollParent property
 	    that.ws.params.scrollParent ? (that.ws.params.scrollParent = false) : (that.ws.scrollParent = true);
@@ -251,6 +259,7 @@ var AudioPlayer = function() {
 	    return;
 	}
 	that.ws.loadBlob(file);
+	document.getElementById('filename').innerHTML = file.name;
     };
 
     function seconds_to_progress(seconds) {
@@ -264,10 +273,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     player.init();
     document.addEventListener('keydown', player.dispatch_keypress);
     document.getElementById('file_input').addEventListener('change', player.load_audio_file, false);
+    document.getElementById('load_file_btn').onclick = function(e) {
+	document.getElementById('file_input').click();
+    };
     document.getElementById('waveform').addEventListener('mousemove', player.dispatch_mouse);
     document.getElementById('skip_back_btn').onclick = function(e) { player.ws.skipBackward(); };
     document.getElementById('play_pause_btn').onclick = function(e) { player.ws.playPause(); };
     document.getElementById('skip_forward_btn').onclick = function(e) {	player.ws.skipForward(); };
+    document.getElementById('loop_toggle_btn').onclick = function(e) {	player.loop_toggle(); };
     document.getElementById('zoom_in_btn').onclick = function(e) { player.zoom_in(); };
     document.getElementById('zoom_out_btn').onclick = function(e) { player.zoom_out(); };
 });

@@ -30,7 +30,7 @@ button {
   cursor: pointer;
   padding: 0.4em 0.6em;
 }
-
+/*
 button:hover, button:focus {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1a000000',GradientType=0);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0.05)), to(rgba(0,0,0, 0.10)));
@@ -39,14 +39,27 @@ button:hover, button:focus {
   background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
   background-image: linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
 }
+*/
+.pure-button-active,
+.pure-button:active {
+  box-shadow: 0 0 0 1px rgba(0,0,0, 0.15) inset, 0 0 6px rgba(0,0,0, 0.20) inset;
+  border-color: #000\9;
+}
 
 input {
   border-radius: 2px;
   border: 1px #e6e6e6 solid;
 }
 
-input[type="file"] {
+#filename {
+  border: 2px #999 solid;
+  border-radius: 2px;
   color: #444;
+  margin: auto;
+  min-height: 32px;
+  padding-bottom: 4px;
+  padding-top: 4px;
+  text-align: center;
   width: 24em;
 }
 
