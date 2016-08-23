@@ -24,6 +24,11 @@ function keep_in_bounds(n, bounds) {
     }
 }
 
+function blur_controls() {
+    document.querySelectorAll('#main_container button')
+	.forEach(function(o, i) { o.blur(); });
+}
+
 
 var AudioPlayer = function() {
     var that = this;
@@ -66,12 +71,14 @@ var AudioPlayer = function() {
     };
 
     this.handle_playing = function() {
-	document.getElementById('play_pause_btn').innerHTML = 'pause';
+	document.querySelector('#play_pause_btn i.fa-play').style.display = 'none';
+	document.querySelector('#play_pause_btn i.fa-pause').style.display = '';
 	that.update_time();
     };
 
-    this.pause = function() {
-	document.getElementById('play_pause_btn').innerHTML = 'play';
+    this.handle_pause = function() {
+	document.querySelector('#play_pause_btn i.fa-play').style.display = '';
+	document.querySelector('#play_pause_btn i.fa-pause').style.display = 'none';
     };
 
     this.handle_region_create = function(region) {
@@ -256,9 +263,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.addEventListener('keydown', player.dispatch_keypress);
     document.getElementById('file_input').addEventListener('change', player.load_audio_file, false);
     document.getElementById('waveform').addEventListener('mousemove', player.dispatch_mouse);
-    document.getElementById('skip_back_btn').onclick = function() { player.ws.skipBackward(); };
-    document.getElementById('play_pause_btn').onclick = function() { player.ws.playPause(); };
-    document.getElementById('skip_forward_btn').onclick = function() { player.ws.skipForward(); };
-    document.getElementById('zoom_in_btn').onclick = player.zoom_in;
-    document.getElementById('zoom_out_btn').onclick = player.zoom_out;
+    document.getElementById('skip_back_btn').onclick = function(e) {
+	player.ws.skipBackward(); blur_controls();
+    };
+    document.getElementById('play_pause_btn').onclick = function(e) {
+	player.ws.playPause(); blur_controls();
+    };
+    document.getElementById('skip_forward_btn').onclick = function(e) {
+	player.ws.skipForward(); blur_controls();
+    };
+    document.getElementById('zoom_in_btn').onclick = function(e) {
+	player.zoom_in(); blur_controls();
+    };
+    document.getElementById('zoom_out_btn').onclick = function(e) {
+	player.zoom_out(); blur_controls();
+    };
 });
