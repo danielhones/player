@@ -171,6 +171,7 @@ var AudioPlayer = function() {
     this.dispatch_keypress = function(e) {
 	// TODO: make this not so dumb
 	if (e.key === " ") {
+	    e.preventDefault();
 	    that.ws.playPause();
 	} else if (e.key === "h") {
 	    that.ws.skip(-that.large_scrub_increment());
@@ -232,6 +233,7 @@ var AudioPlayer = function() {
 	} else if (e.key === "$") {
 	    that.ws.seekAndCenter(1);
 	}
+	blur_controls();
     };
 
     this.dispatch_mouse = function() {
@@ -284,21 +286,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.addEventListener('keydown', player.dispatch_keypress);
     document.getElementById('file_input').addEventListener('change', player.load_audio_file, false);
     document.getElementById('waveform').addEventListener('mousemove', player.dispatch_mouse);
-    document.getElementById('skip_back_btn').onclick = function(e) {
-	player.ws.skipBackward(); blur_controls();
-    };
-    document.getElementById('play_pause_btn').onclick = function(e) {
-	player.ws.playPause(); blur_controls();
-    };
-    document.getElementById('skip_forward_btn').onclick = function(e) {
-	player.ws.skipForward(); blur_controls();
-    };
-    document.getElementById('zoom_in_btn').onclick = function(e) {
-	player.zoom_in(); blur_controls();
-    };
-    document.getElementById('zoom_out_btn').onclick = function(e) {
-	player.zoom_out(); blur_controls();
-    };
+    document.getElementById('skip_back_btn').onclick = function(e) { player.ws.skipBackward(); };
+    document.getElementById('play_pause_btn').onclick = function(e) { player.ws.playPause(); };
+    document.getElementById('skip_forward_btn').onclick = function(e) {	player.ws.skipForward(); };
+    document.getElementById('zoom_in_btn').onclick = function(e) { player.zoom_in(); };
+    document.getElementById('zoom_out_btn').onclick = function(e) { player.zoom_out(); };
 });
 
 </script>
