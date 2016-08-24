@@ -92,7 +92,7 @@ input {
 
 #controls button {
   text-align: center;
-  min-width: 32px;
+  width: 32px;
 }
 
 .headroom {
