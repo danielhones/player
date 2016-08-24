@@ -111,6 +111,8 @@ var AudioPlayer = function() {
 		key: key,
 		description: desc
 	    });
+	    var newrow = "<tr><td><code>" + key.toString().replace('+', ' + ') + "</code></td><td>" + desc + "</td></tr>";
+	    key_help.innerHTML += newrow;
 	    Mousetrap.bind(key, func);
 	});
     };

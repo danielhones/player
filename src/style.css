@@ -120,10 +120,16 @@ input {
 }
 
 #modal_wrapper {
+  overflow-y: scroll;
+  position: fixed;
+  top: 12px;
+  bottom: 12px;
   color: #444;
   width: 632px;
   margin: auto;
-  margin-top: 2em;
+  left: 50%;
+  margin-left: -300px;
+/*  margin-top: 2em;*/
   background: #f0f0f0;
   border: thin gray solid;
   border-radius: 4px;
@@ -158,8 +164,34 @@ input {
 }
 
 #modal_body {
-/*  padding: 4px 8px;
-   margin-bottom: 4px;*/
   width: 600px;
   margin: auto;
+  padding: 1em;
 }
+
+#keyboard_shortcuts table {
+  border: thin #444 solid;
+  margin: auto;
+}
+code {
+  font-size: 0.8em;
+  font-family: monospace;
+}
+#keyboard_shortcuts thead {
+  font-weight: bold;
+  text-align: center;
+}
+#keyboard_shortcuts table {
+  border-collapse: collapse;
+}
+#keyboard_shortcuts th {
+
+/*  border-bottom: thin black solid;*/
+}
+
+#keyboard_shortcuts tbody td,
+#keyboard_shortcuts thead th {
+  border: thin #444 solid;
+  padding: 0.4em 1.5em;
+}
+
