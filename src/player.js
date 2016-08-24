@@ -43,7 +43,79 @@ function close_modal() {
 
 var AudioPlayer = function() {
     var that = this;
+    
+    // bindings format is [keypress, callback, description]
+    var DEFAULT_BINDINGS = [
+	['space', function(e) { e.preventDefault(); that.ws.playPause(); }, 'toggle play/pause'],
+	['h', function() { that.ws.skip(-that.large_scrub_increment()); }, 'large scrub left'],
+	['j', function() { that.ws.skip(-that.small_scrub_increment()); }, 'small scrub left'],
+	['k', function() { that.ws.skip(that.small_scrub_increment()); }, 'small scrub right'],
+	['l', function() { that.ws.skip(that.large_scrub_increment()); }, 'large scrub right'],
+	['shift+=', that.zoom_in, 'zoom in on waveform'],
+	['shift+-', that.zoom_out, 'zoom out from waveform'],
+	['shift+0', function() { that.ws.zoom(0); }, 'reset zoom to fit whole waveform in window'],
+	['u', function() { that.set_loop_start(that.ws.getCurrentTime()); }, 'set loop start at current time'],
+	['i', function() { that.set_loop_end(that.ws.getCurrentTime()); }, 'set loop end at current time'],
+	['o', function() { that.loop_toggle(); }, 'toggle loop on/off'],
+	['shift+y',
+	 function() {
+	    if (that.region) {
+		that.set_loop_start(that.region.start - that.small_scrub_increment());
+	    }
+	 },
+	 'scrub loop start left'],
+	['shift+u',
+	 function() {
+	    if (that.region) {
+		that.set_loop_start(that.region.start + that.small_scrub_increment());
+	    }
+	 },
+	 'scrub loop start right'],
+	['shift+i',
+	 function() {
+	    if (that.region) {
+		that.set_loop_end(that.region.end - that.small_scrub_increment());
+	    }
+	 },
+	 'scrub loop end left'],
+	['shift+o',
+	 function() {
+	     if (that.region) {
+		 that.set_loop_end(that.region.end + that.small_scrub_increment());
+	     }
+	 },
+	 'scrub loop end right'
+	],
+	['s',
+	 function() {
+	     that.ws.params.autoCenter ? (that.ws.params.autoCenter = false) : (that.ws.params.autoCenter = true);
+	 },
+	 'toggle auto-center of waveform while playing'],
+	['f', function() { document.getElementById('file_input').click(); }, 'choose a file to play'],
+	['a', function() { that.jump_to_loop_start(); }, 'jump to start of loop'],
+	['0', function() { that.ws.seekAndCenter(0); }, 'jump to start of track'],
+	['shift+4', function() { that.ws.seekAndCenter(1); }, 'jump to end of track'],
+	['?', open_modal, 'show help'],
+	[['x', 'esc'], close_modal, 'close help']
+    ];
+    this.bindings = [];
 
+    this.set_bindings = function(bindings) {
+	bindings = bindings || DEFAULT_BINDINGS;
+	var key_help = document.querySelector('#keyboard_shortcuts table tbody');
+	bindings.forEach(function(b, i) {
+	    var key = b[0],
+		func = b[1],
+		desc = b[2];
+	    that.bindings.push({
+		key: key,
+		description: desc
+	    });
+	    Mousetrap.bind(key, func);
+	});
+    };
+
+    
     this.loop_start = 0;
     this.loop_end = 0;
     this.loop_enabled = false;
@@ -79,6 +151,7 @@ var AudioPlayer = function() {
 	    that.update_time(0);
 	    that.ws.zoom(0);
 	});
+	that.set_bindings();
     };
     
     this.update_time = function(time) {
@@ -178,72 +251,6 @@ var AudioPlayer = function() {
 	document.getElementById('loop_end_indicator')
 	    .innerHTML = format_time(end_time);
     };
-    
-    this.dispatch_keypress = function(e) {
-	// TODO: make this not so dumb
-	if (e.key === " ") {
-	    e.preventDefault();
-	    that.ws.playPause();
-	} else if (e.key === "h") {
-	    that.ws.skip(-that.large_scrub_increment());
-	} else if (e.key === "j") {
-	    that.ws.skip(-that.small_scrub_increment());
-	} else if (e.key === "k") {
-	    that.ws.skip(that.small_scrub_increment());
-	} else if (e.key === "l") {
-	    that.ws.skip(that.large_scrub_increment());
-	} else if (e.key === "+") {
-	    that.zoom_in();
-	} else if (e.key === "_") {
-	    that.zoom_out();
-	} else if (e.key === ")") {
-	    that.ws.zoom(0);
-	} else if (e.key === "u") {
-	    // set loop start to current time
-	    that.set_loop_start(that.ws.getCurrentTime());
-	} else if (e.key === "i") {
-	    // set loop end to current time
-	    that.set_loop_end(that.ws.getCurrentTime());
-	} else if (e.key === "Y") {
-	    // scrub loop start left
-	    if (that.region) {
-		that.set_loop_start(that.region.start - that.small_scrub_increment());
-	    }
-	} else if (e.key === "U") {
-	    // scrub loop start right
-	    if (that.region) {
-		that.set_loop_start(that.region.start + that.small_scrub_increment());
-	    }
-	} else if (e.key === "I") {
-	    // scrub loop end left
-	    if (that.region) {
-		that.set_loop_end(that.region.end - that.small_scrub_increment());
-	    }
-	} else if (e.key === "O") {
-	    // scrub loop end right
-	    if (that.region) {
-		that.set_loop_end(that.region.end + that.small_scrub_increment());
-	    }
-	} else if (e.key === "o") {
-	    that.loop_toggle();
-	} else if (e.key === "s") {
-	    // toggle autoCenter property
-	    that.ws.params.autoCenter ? (that.ws.params.autoCenter = false) : (that.ws.params.autoCenter = true);
-	} else if (e.key === "f") {
-	    document.getElementById('file_input').click();
-	} else if (e.key === "a") {
-	    that.jump_to_loop_start();
-	} else if (e.key === "0" && !e.shiftKey) {
-	    that.ws.seekAndCenter(0);
-	} else if (e.key === "$") {
-	    that.ws.seekAndCenter(1);
-	} else if (e.key === "?") {
-	    open_modal();
-	} else if (e.key === "x" || e.key === "Escape") {
-	    close_modal();
-	}
-	blur_controls();
-    };
 
     this.jump_to_loop_start = function() {
 	if (that.region) { that.ws.seekAndCenter(that.region.start / that.ws.getDuration()); }
@@ -294,7 +301,7 @@ var AudioPlayer = function() {
 document.addEventListener("DOMContentLoaded", function(event) { 
     player = new AudioPlayer();
     player.init();
-    document.addEventListener('keydown', player.dispatch_keypress);
+//    document.addEventListener('keydown', player.dispatch_keypress);
     document.getElementById('file_input').addEventListener('change', player.load_audio_file, false);
     document.getElementById('load_file_btn').onclick = function(e) {
 	document.getElementById('file_input').click();

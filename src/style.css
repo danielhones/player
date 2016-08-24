@@ -110,6 +110,7 @@ input {
 }
 
 #modal_backdrop {
+  z-index: 20;
   position: fixed;
   left: 0;
   top: 0;
