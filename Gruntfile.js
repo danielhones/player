@@ -9,7 +9,6 @@ module.exports = function(grunt) {
 	},
 	inline: {
 	    options: {
-		exts: ['woff', 'eot'],
 		cssmin: true,
 		tag: '',
 		inlineTagAttributes: {

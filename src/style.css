@@ -24,12 +24,17 @@ body {
   border-radius: 2px;
   padding: 4px;
   font-size: 0.8em;
-  transition-property: all;
-  transition-delay: 2s;
+/*  transition-property: all;
+  transition-delay: 2s;*/
   content: attr(aria-label);
   position: absolute;
   margin-top: 8px;
   margin-left: 12px;
+}
+
+[aria-label] {
+  transition-delay: 2s;
+  transition-property: all;
 }
 
 #attribution {
@@ -45,32 +50,22 @@ body {
 
 button {
   border-radius: 2px;
-  /*  color: rgba(0, 0, 0, 0.80);*/
   color: #f0f0f0;
   border: none rgba(0, 0, 0, 0);
-  /* background-color: #E6E6E6;*/
   background-color: #444;
   cursor: pointer;
   padding: 0.4em 0.6em;
 }
-button:hover, button:focus {
-  color: #fff;
-}
 
-/*
 button:hover, button:focus {
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1a000000',GradientType=0);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0.05)), to(rgba(0,0,0, 0.10)));
-  background-image: -webkit-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
-  background-image: -moz-linear-gradient(top, rgba(0,0,0, 0.05) 0%, rgba(0,0,0, 0.10));
-  background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
-  background-image: linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.10));
-}
-*/
-.pure-button-active,
-.pure-button:active {
-  box-shadow: 0 0 0 1px rgba(0,0,0, 0.15) inset, 0 0 6px rgba(0,0,0, 0.20) inset;
-  border-color: #000\9;
+  background: rgba(102,102,102,1);
+  background: -moz-linear-gradient(top, rgba(102,102,102,1) 0%, rgba(68,68,68,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(102,102,102,1)), color-stop(100%, rgba(68,68,68,1)));
+  background: -webkit-linear-gradient(top, rgba(102,102,102,1) 0%, rgba(68,68,68,1) 100%);
+  background: -o-linear-gradient(top, rgba(102,102,102,1) 0%, rgba(68,68,68,1) 100%);
+  background: -ms-linear-gradient(top, rgba(102,102,102,1) 0%, rgba(68,68,68,1) 100%);
+  background: linear-gradient(to bottom, rgba(102,102,102,1) 0%, rgba(68,68,68,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#444444', GradientType=0 );
 }
 
 input {
@@ -97,7 +92,7 @@ input {
 
 #controls button {
   text-align: center;
-  width: 32px;
+  min-width: 32px;
 }
 
 .headroom {
@@ -110,13 +105,8 @@ input {
   margin: auto;
 }
 
-#loop_indicators table td {
-/*  padding: 0.5em;*/
-}
-
-#loop_indicators table td[colspan="2"] {
-  text-align: center;
-  padding-top: initial;
+#loop_start_indicator {
+  cursor: pointer;
 }
 
 #modal_backdrop {
@@ -129,10 +119,46 @@ input {
 }
 
 #modal_wrapper {
-  width: 60%;
+  color: #444;
+  width: 632px;
   margin: auto;
   margin-top: 2em;
-  background: #efefef;
+  background: #f0f0f0;
   border: thin gray solid;
   border-radius: 4px;
+}
+
+#modal_header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  min-height: 32px;
+  margin-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-bottom: thin gray solid;
+}
+
+#modal_header h1 {
+  text-align: center;
+}
+
+#modal_close_btn {
+  background-color: transparent;
+  color: #444;
+}
+
+#modal_header_title {
+  flex-grow: 1;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+#modal_body {
+/*  padding: 4px 8px;
+   margin-bottom: 4px;*/
+  width: 600px;
+  margin: auto;
 }

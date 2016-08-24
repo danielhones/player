@@ -27,9 +27,17 @@ function keep_in_bounds(n, bounds) {
 function blur_controls() {
     var buttons = document.querySelectorAll('#main_container button');
     for (var i = 0; i < buttons.length; i++) {
-	//	.forEach(function(o, i) { o.blur(); });
 	buttons[i].blur();
     }
+}
+
+function open_modal() {
+    var modal = document.getElementById('modal_backdrop');
+    modal.style.display = "";
+}
+
+function close_modal() {
+    document.getElementById('modal_backdrop').style.display = "none";
 }
 
 
@@ -224,19 +232,21 @@ var AudioPlayer = function() {
 	} else if (e.key === "f") {
 	    document.getElementById('file_input').click();
 	} else if (e.key === "a") {
-	    if (that.region) {
-		that.ws.seekAndCenter(that.region.start / that.ws.getDuration());
-	    }
+	    that.jump_to_loop_start();
 	} else if (e.key === "0" && !e.shiftKey) {
 	    that.ws.seekAndCenter(0);
 	} else if (e.key === "$") {
 	    that.ws.seekAndCenter(1);
+	} else if (e.key === "?") {
+	    open_modal();
+	} else if (e.key === "x" || e.key === "Escape") {
+	    close_modal();
 	}
 	blur_controls();
     };
 
-    this.dispatch_mouse = function() {
-
+    this.jump_to_loop_start = function() {
+	if (that.region) { that.ws.seekAndCenter(that.region.start / that.ws.getDuration()); }
     };
 
     this.small_scrub_increment = function() {
@@ -292,11 +302,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.getElementById('filename').onclick = function(e) {
 	document.getElementById('file_input').click();
     };
-    document.getElementById('waveform').addEventListener('mousemove', player.dispatch_mouse);
     document.getElementById('skip_back_btn').onclick = function(e) { player.ws.skipBackward(); };
     document.getElementById('play_pause_btn').onclick = function(e) { player.ws.playPause(); };
     document.getElementById('skip_forward_btn').onclick = function(e) {	player.ws.skipForward(); };
     document.getElementById('loop_toggle_btn').onclick = function(e) {	player.loop_toggle(); };
+    document.getElementById('loop_start_indicator').onclick = player.jump_to_loop_start;
     document.getElementById('zoom_in_btn').onclick = function(e) { player.zoom_in(); };
     document.getElementById('zoom_out_btn').onclick = function(e) { player.zoom_out(); };
+    document.getElementById('help_btn').onclick = function(e) { open_modal(); };
+    document.getElementById('modal_close_btn').onclick = function(e) { close_modal(); };
 });
