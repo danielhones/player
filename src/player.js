@@ -227,8 +227,8 @@ var AudioPlayer = function() {
 	} else if (e.key === "o") {
 	    that.loop_toggle();
 	} else if (e.key === "s") {
-	    // toggle scrollParent property
-	    that.ws.params.scrollParent ? (that.ws.params.scrollParent = false) : (that.ws.scrollParent = true);
+	    // toggle autoCenter property
+	    that.ws.params.autoCenter ? (that.ws.params.autoCenter = false) : (that.ws.params.autoCenter = true);
 	} else if (e.key === "f") {
 	    document.getElementById('file_input').click();
 	} else if (e.key === "a") {
