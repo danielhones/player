@@ -146,13 +146,18 @@ input {
   border-bottom: thin gray solid;
 }
 
-#modal_header h1 {
+#modal_header h1, #modal_body h2 {
   text-align: center;
 }
 
 #modal_close_btn {
   background-color: transparent;
   color: #444;
+}
+
+#modal_close_btn:hover, #modal_close_btn:active {
+  background: transparent;
+  color: #777;
 }
 
 #modal_header_title {
@@ -184,14 +189,11 @@ code {
 #keyboard_shortcuts table {
   border-collapse: collapse;
 }
-#keyboard_shortcuts th {
-
-/*  border-bottom: thin black solid;*/
-}
-
 #keyboard_shortcuts tbody td,
 #keyboard_shortcuts thead th {
   border: thin #444 solid;
   padding: 0.4em 1.5em;
 }
-
+#keyboard_shortcuts tbody td:first-child {
+  text-align: center;
+}
