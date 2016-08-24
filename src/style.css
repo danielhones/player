@@ -1,7 +1,11 @@
 html * {
   box-sizing: border-box;
-  font-family: sans;
+  font-family: sans, sans-serif;
   font-size: 16px;
+}
+
+body {
+  margin: 0px;
 }
 
 #time {
@@ -10,14 +14,33 @@ html * {
   text-align: center;
 }
 
+/*
+   from here - http://stackoverflow.com/a/17579580/3199099
+ */
+[aria-label]:hover:after {
+  background-color: #eee;
+  color: #444;
+  border: 2px #ccc solid;
+  border-radius: 2px;
+  padding: 4px;
+  font-size: 0.8em;
+  transition-property: all;
+  transition-delay: 2s;
+  content: attr(aria-label);
+  position: absolute;
+  margin-top: 8px;
+  margin-left: 12px;
+}
+
 #attribution {
+  font-size: 0.8em;
   position: fixed;
   bottom: 0.5em;
   right: 0.5em;
 }
 
-#attribution, #attribution a {
-  font-size: 0.8em;
+#attribution a {
+  font-size: 1em;
 }
 
 button {
@@ -30,6 +53,10 @@ button {
   cursor: pointer;
   padding: 0.4em 0.6em;
 }
+button:hover, button:focus {
+  color: #fff;
+}
+
 /*
 button:hover, button:focus {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1a000000',GradientType=0);
@@ -55,6 +82,7 @@ input {
   border: 2px #999 solid;
   border-radius: 2px;
   color: #444;
+  cursor: pointer;
   margin: auto;
   min-height: 32px;
   padding-bottom: 4px;
@@ -77,12 +105,13 @@ input {
 }
 
 #loop_indicators table {
+  color: #444;
   border: none;
   margin: auto;
 }
 
 #loop_indicators table td {
-  padding: 0.5em;
+/*  padding: 0.5em;*/
 }
 
 #loop_indicators table td[colspan="2"] {

@@ -1,7 +1,15 @@
 module.exports = function(grunt) {
     grunt.initConfig({
+	cssUrlEmbed: {
+	    encodeDirectly: {
+		files: {
+		    'extsrc/font-awesome.embedded.css': ['extsrc/font-awesome-4.6.3/css/font-awesome.css']
+		}
+	    }
+	},
 	inline: {
 	    options: {
+		exts: ['woff', 'eot'],
 		cssmin: true,
 		tag: '',
 		inlineTagAttributes: {
@@ -30,9 +38,10 @@ module.exports = function(grunt) {
 	},
     });
 
-    grunt.registerTask('build', ['inline']);
+    grunt.registerTask('build', ['cssUrlEmbed', 'inline']);
     grunt.registerTask('default', ['build', 'watch']);
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-inline');
+    grunt.loadNpmTasks('grunt-css-url-embed');
 };

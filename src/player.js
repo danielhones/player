@@ -25,8 +25,11 @@ function keep_in_bounds(n, bounds) {
 }
 
 function blur_controls() {
-    document.querySelectorAll('#main_container button')
-	.forEach(function(o, i) { o.blur(); });
+    var buttons = document.querySelectorAll('#main_container button');
+    for (var i = 0; i < buttons.length; i++) {
+	//	.forEach(function(o, i) { o.blur(); });
+	buttons[i].blur();
+    }
 }
 
 
@@ -113,6 +116,7 @@ var AudioPlayer = function() {
 		end: that.ws.getDuration()
 	    });
 	}
+	that.loop_on();
 	that.update_loop_indicators();
     };
 
@@ -128,6 +132,7 @@ var AudioPlayer = function() {
 		end: loop_end
 	    });
 	}
+	that.loop_on();
 	that.update_loop_indicators();
     };
 
@@ -251,16 +256,17 @@ var AudioPlayer = function() {
     };
 
     this.zoom_in = function() {
-	that.ws.zoom(that.ws.params.minPxPerSec + 4);
+	that.ws.zoom(keep_in_bounds(that.ws.params.minPxPerSec + 4, [0, 140]));
     };
 
     this.zoom_out = function() {
-	that.ws.zoom(that.ws.params.minPxPerSec - 4);
+	that.ws.zoom(keep_in_bounds(that.ws.params.minPxPerSec - 4, [0, 140]));
     };
 
     this.load_audio_file = function(e) {
 	// adapted from here - http://stackoverflow.com/a/26298948/3199099
-	e.srcElement.blur();
+	that.loop_off();
+	e.target.blur();
 	var file = e.target.files[0];
 	if (!file) {
 	    return;
@@ -281,6 +287,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.addEventListener('keydown', player.dispatch_keypress);
     document.getElementById('file_input').addEventListener('change', player.load_audio_file, false);
     document.getElementById('load_file_btn').onclick = function(e) {
+	document.getElementById('file_input').click();
+    };
+    document.getElementById('filename').onclick = function(e) {
 	document.getElementById('file_input').click();
     };
     document.getElementById('waveform').addEventListener('mousemove', player.dispatch_mouse);
