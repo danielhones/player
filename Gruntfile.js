@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 	    },
 	    dist: {
 		src: "src/index.html",
-		dest: "build/index.html",
+		dest: "build/player.html",
 	    },
 	},
 	watch: {
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
 		tasks: ['inline'],
 	    },
 	    css: {
-		files: ['src/*.scss', 'src/*.css'],
+		files: ['src/*.css'],
 		tasks: ['inline'],
 	    },
 	    html: {
