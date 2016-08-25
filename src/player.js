@@ -51,8 +51,8 @@ var AudioPlayer = function() {
 	['j', function() { that.ws.skip(-that.small_scrub_increment()); }, 'small scrub left'],
 	['k', function() { that.ws.skip(that.small_scrub_increment()); }, 'small scrub right'],
 	['l', function() { that.ws.skip(that.large_scrub_increment()); }, 'large scrub right'],
-	['shift+=', that.zoom_in, 'zoom in on waveform'],
-	['shift+-', that.zoom_out, 'zoom out from waveform'],
+	['shift+=', function() { that.zoom_in(); }, 'zoom in on waveform'],
+	['shift+-', function() { that.zoom_out(); }, 'zoom out from waveform'],
 	['shift+0', function() { that.ws.zoom(0); }, 'reset zoom to fit whole waveform in window'],
 	['u', function() { that.set_loop_start(that.ws.getCurrentTime()); }, 'set loop start at current time'],
 	['i', function() { that.set_loop_end(that.ws.getCurrentTime()); }, 'set loop end at current time'],
@@ -93,8 +93,8 @@ var AudioPlayer = function() {
 	 'toggle auto-center of waveform while playing'],
 	['f', function() { document.getElementById('file_input').click(); }, 'choose a file to play'],
 	['a', function() { that.jump_to_loop_start(); }, 'jump to start of loop'],
-	['0', function() { that.ws.seekAndCenter(0); }, 'jump to start of track'],
-	['shift+4', function() { that.ws.seekAndCenter(1); }, 'jump to end of track'],
+	['shift+[', function() { that.ws.seekAndCenter(0); }, 'jump to start of track'],
+	['shift+]', function() { that.ws.seekAndCenter(1); }, 'jump to end of track'],
 	['?', open_modal, 'show help'],
 	[['x', 'esc'], close_modal, 'close help']
     ];
@@ -303,7 +303,7 @@ var AudioPlayer = function() {
 document.addEventListener("DOMContentLoaded", function(event) { 
     player = new AudioPlayer();
     player.init();
-//    document.addEventListener('keydown', player.dispatch_keypress);
+
     document.getElementById('file_input').addEventListener('change', player.load_audio_file, false);
     document.getElementById('load_file_btn').onclick = function(e) {
 	document.getElementById('file_input').click();
