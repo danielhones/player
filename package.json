@@ -17,6 +17,7 @@
   },
   "homepage": "https://gitlab.com/danielhones/player#README",
   "devDependencies": {
+    "grunt": "^0.4.5",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-css-url-embed": "^1.6.1",
     "grunt-inline": "^0.3.6"
